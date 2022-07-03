@@ -1,0 +1,13 @@
+package com.example.Books.Collection;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BooksCollectionApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BooksCollectionApplication.class, args);
+	}
+
+}
