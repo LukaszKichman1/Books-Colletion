@@ -3,7 +3,7 @@ package com.example.Books.Collection.Entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name ="books")
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Book {
     @JoinColumn(name = "user_id", referencedColumnName = "Id_user")
     private User user;
 
-    public Book(){
+    public Book() {
 
     }
 
@@ -71,5 +71,52 @@ public class Book {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static class Builder {
+        private String title;
+
+        private String kind;
+
+        private String author;
+
+        private int rate;
+        private User user;
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder kind(String kind) {
+            this.kind = kind;
+            return this;
+        }
+
+        public Builder author(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder rate(int rate) {
+            this.rate = rate;
+            return this;
+        }
+
+        public Builder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Book build() {
+            Book book = new Book();
+            book.title = this.title;
+            book.kind = this.kind;
+            book.author = this.author;
+            book.rate = this.rate;
+            book.user = this.user;
+            return book;
+        }
+
     }
 }

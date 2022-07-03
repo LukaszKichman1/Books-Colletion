@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -29,18 +29,18 @@ public class User {
     private boolean isEnabled;
 
     @JsonIgnoreProperties("user")
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Book> books;
 
     @OneToOne
     @JoinColumn(name = "id_token", referencedColumnName = "Id_token")
     private Token token;
 
-    public User(){
+    public User() {
 
     }
 
-    public void addBook(Book book){
+    public void addBook(Book book) {
         this.books.add(book);
     }
 
@@ -116,5 +116,54 @@ public class User {
         this.token = token;
     }
 
-    
+    public static class Builder {
+        private String nickName;
+        private String login;
+        private String password;
+        private String email;
+        private String roles;
+        private boolean isEnabled;
+
+        public Builder nickName(String nickName) {
+            this.nickName = nickName;
+            return this;
+        }
+
+        public Builder login(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder roles(String roles) {
+            this.roles = roles;
+            return this;
+        }
+
+        public Builder isEnabled(boolean isEnabled) {
+            this.isEnabled = isEnabled;
+            return this;
+        }
+
+        public User build() {
+            User user = new User();
+            user.nickName = this.nickName;
+            user.login = this.login;
+            user.password = this.password;
+            user.email = this.email;
+            user.roles = this.roles;
+            user.isEnabled = this.isEnabled;
+            return user;
+        }
+    }
+
 }

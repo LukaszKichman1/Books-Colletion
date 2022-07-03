@@ -19,9 +19,15 @@ public class UserController {
         this.userService=userService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/signup")
     public ResponseEntity<User> addUser(@RequestBody User user){
         return ResponseEntity.ok(userService.save(user));
+    }
+
+    @PostMapping("/activation")
+    public ResponseEntity activationUser(@RequestParam String login, int valueOfToken){
+        userService.activationUser(login, valueOfToken);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/one")
