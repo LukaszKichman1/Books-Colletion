@@ -30,8 +30,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/one")
-    public ResponseEntity<Optional> oneUser(@RequestParam int id){
+    @GetMapping("/onebyid")
+    public ResponseEntity<Optional> oneUserById(@RequestParam int id){
         return ResponseEntity.ok(userService.findById(id));
     }
+
+    @GetMapping("/onebynickname")
+    public ResponseEntity<Optional> oneUserByNickName(@RequestParam String nickName){
+        return ResponseEntity.ok(userService.findByNickName(nickName));
+    }
+
 }

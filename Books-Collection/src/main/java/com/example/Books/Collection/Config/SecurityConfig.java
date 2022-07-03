@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/comment/updatecomment").authenticated()
 
-                .antMatchers("/comment/deletecommentbyid").hasRole("ADMIN")
+                .antMatchers("/user/onebynickname").hasRole("ADMIN")
+                .antMatchers("/user/onebyid").hasRole("ADMIN")
                 .and()
                 .formLogin().permitAll();
     }
