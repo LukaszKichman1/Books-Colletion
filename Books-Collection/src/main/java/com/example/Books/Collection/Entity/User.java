@@ -40,7 +40,6 @@ public class User {
 
     }
 
-
     public int getId_user() {
         return Id_user;
     }

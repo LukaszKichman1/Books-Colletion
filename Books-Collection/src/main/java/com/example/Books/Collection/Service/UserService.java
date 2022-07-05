@@ -104,7 +104,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
+    public void deleteById(int id){
+        Optional<User> userOptional=findById(id);
+        userRepository.delete(userOptional.get());
+    }
 }
 
 
