@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,6 +98,10 @@ public class UserService {
         } else {
             throw new UserNotFoundException("We cant find user with that nickname");
         }
+    }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 
 

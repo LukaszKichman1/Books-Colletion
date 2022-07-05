@@ -38,8 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/one").permitAll()
 
 
-                .antMatchers("/comment/updatecomment").authenticated()
+                .antMatchers("/book/addbook").authenticated()
 
+                .antMatchers("/user/listofusers").hasRole("ADMIN")
                 .antMatchers("/user/onebynickname").hasRole("ADMIN")
                 .antMatchers("/user/onebyid").hasRole("ADMIN")
                 .and()

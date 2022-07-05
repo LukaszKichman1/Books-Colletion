@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,6 +39,11 @@ public class UserController {
     @GetMapping("/onebynickname")
     public ResponseEntity<Optional> oneUserByNickName(@RequestParam String nickName){
         return ResponseEntity.ok(userService.findByNickName(nickName));
+    }
+
+    @GetMapping("/listofusers")
+    public ResponseEntity<List<User>> allUsers(){
+        return ResponseEntity.ok(userService.findAll());
     }
 
 }

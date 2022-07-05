@@ -40,9 +40,6 @@ public class User {
 
     }
 
-    public void addBook(Book book) {
-        this.books.add(book);
-    }
 
     public int getId_user() {
         return Id_user;

@@ -2,6 +2,7 @@ package com.example.Books.Collection.Controller;
 
 import com.example.Books.Collection.Entity.Book;
 import com.example.Books.Collection.Service.BookService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,9 @@ public class BookController {
     }
 
 
-    @PostMapping("/add")
-    public ResponseEntity<Book> addBook(@RequestBody Book book){
-        return ResponseEntity.ok(bookService.save(book));
+    @PostMapping("/addbook")
+    public ResponseEntity<Book> addBook(@RequestParam String title, int rate) throws JsonProcessingException {
+        return ResponseEntity.ok(bookService.addBook(title,rate));
     }
 
     @GetMapping("/one")
