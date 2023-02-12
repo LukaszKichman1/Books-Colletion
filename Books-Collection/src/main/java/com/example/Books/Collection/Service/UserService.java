@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class UserService {
@@ -23,6 +25,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private TokenRepository tokenRepository;
     private MailService mailService;
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, MailService mailService) {
@@ -58,6 +61,7 @@ public class UserService {
             userBuilder.setToken(token);
             tokenRepository.save(token);
             mailService.SenderMail(user.getEmail(), "link : http://localhost:8080/user/activation   Your token=" + token.getValue(), "activation of your account");
+            logger.trace("User" + userBuilder.getNickName() + " was created");
             return userRepository.save(userBuilder);
         }
     }
@@ -66,6 +70,7 @@ public class UserService {
     public void activationUser(String login, int valueOfToken) {
         Optional<User> optionalUser = findByLogin(login);
         if (optionalUser.isPresent() && optionalUser.get().getToken().getValue() == valueOfToken) {
+            logger.trace("User" + optionalUser.get().getNickName() + " was activated");
             optionalUser.get().setEnabled(true);
         } else {
             throw new InvalidTokenException("Wrong value of token");
@@ -106,6 +111,7 @@ public class UserService {
 
     public void deleteById(int id){
         Optional<User> userOptional=findById(id);
+        logger.trace("User" + userOptional.get().getNickName() + " was deleted");
         userRepository.delete(userOptional.get());
     }
 }

@@ -45,14 +45,14 @@ public class UserServiceTest {
 
     @BeforeEach
     @Deprecated
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.initMocks(this);
-        underTest=new UserService(userRepository,passwordEncoder,tokenRepository,mailService);
+        underTest = new UserService(userRepository, passwordEncoder, tokenRepository, mailService);
     }
 
     @Test
     @Deprecated
-    void itShouldSaveNewUser(){
+    void itShouldSaveNewUser() {
         //given
         User user = new User.Builder()
                 .nickName("nick")
@@ -79,7 +79,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void itShouldNotSaveUserBecauseThatUserAlreadyExist(){
+    void itShouldNotSaveUserBecauseThisUserAlreadyExist() {
         //given
         User user = new User.Builder()
                 .nickName("nick")
@@ -101,9 +101,9 @@ public class UserServiceTest {
     }
 
     @Test
-    void itShouldActivateUser(){
+    void itShouldActivateUser() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -112,23 +112,23 @@ public class UserServiceTest {
                 .isEnabled(false)
                 .build();
 
-        Token token=new Token(20);
+        Token token = new Token(20);
         user.setToken(token);
         tokenRepository.save(token);
 
         given(userRepository.findByLogin(user.getLogin())).willReturn(Optional.of(user));
 
         //when
-        underTest.activationUser(user.getLogin(),user.getToken().getValue());
+        underTest.activationUser(user.getLogin(), user.getToken().getValue());
 
         //then
         assertThat(user.isEnabled()).isTrue();
     }
 
     @Test
-    void itShouldNotActivateUserBecauseThatUserDoNotExist(){
+    void itShouldNotActivateUserBecauseThisUserDoNotExist() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -137,7 +137,7 @@ public class UserServiceTest {
                 .isEnabled(false)
                 .build();
 
-        Token token=new Token(20);
+        Token token = new Token(20);
         user.setToken(token);
         tokenRepository.save(token);
 
@@ -145,15 +145,15 @@ public class UserServiceTest {
 
         //when
         //then
-        assertThatThrownBy(()->underTest.activationUser(user.getLogin(),user.getToken().getValue()))
+        assertThatThrownBy(() -> underTest.activationUser(user.getLogin(), user.getToken().getValue()))
                 .isExactlyInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("We cant find user with that login");
     }
 
     @Test
-    void itShouldNotActivatieUserBecauseValueOfTokenIsInvalid(){
+    void itShouldNotActivatieUserBecauseValueOfTokenIsInvalid() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -163,7 +163,7 @@ public class UserServiceTest {
                 .build();
 
 
-        Token token=new Token(20);
+        Token token = new Token(20);
         user.setToken(token);
         tokenRepository.save(token);
 
@@ -172,15 +172,15 @@ public class UserServiceTest {
 
         //when
         //then
-        assertThatThrownBy(()->underTest.activationUser(user.getLogin(),70))
+        assertThatThrownBy(() -> underTest.activationUser(user.getLogin(), 70))
                 .isExactlyInstanceOf(InvalidTokenException.class)
                 .hasMessageContaining("Wrong value of token");
     }
 
     @Test
-    void itShouldReturnUserById(){
+    void itShouldReturnUserById() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -202,9 +202,9 @@ public class UserServiceTest {
     }
 
     @Test
-    void itShouldNotReturnUserByIdBecauseThatUserDoNotExist(){
+    void itShouldNotReturnUserByIdBecauseThisUserDoNotExist() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -217,7 +217,7 @@ public class UserServiceTest {
 
         //when
         //then
-        assertThatThrownBy(()->underTest.findById(user.getId_user()))
+        assertThatThrownBy(() -> underTest.findById(user.getId_user()))
                 .isExactlyInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("We cant find user with that id");
     }
@@ -226,7 +226,7 @@ public class UserServiceTest {
     @Deprecated
     void itShouldReturnUserByLogin() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -248,9 +248,9 @@ public class UserServiceTest {
     }
 
     @Test
-    void itShouldNotReturnUserByLoginBecauseThatUserDoNotExist() {
+    void itShouldNotReturnUserByLoginBecauseThisUserDoNotExist() {
         //given
-        User user= new User.Builder()
+        User user = new User.Builder()
                 .nickName("nick")
                 .login("login")
                 .password("password")
@@ -266,5 +266,84 @@ public class UserServiceTest {
         assertThatThrownBy(() -> underTest.findByLogin(user.getLogin()))
                 .isExactlyInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("We cant find user with that login");
+    }
+
+    @Test
+    @Deprecated
+    void itShouldReturnUserByNickname() {
+        //given
+        User user = new User.Builder()
+                .nickName("nick")
+                .login("login")
+                .password("password")
+                .email("email@gmail.com")
+                .roles("ROLE_USER")
+                .isEnabled(false)
+                .build();
+
+        given(userRepository.findByNickName(user.getNickName())).willReturn(Optional.of(user));
+
+        //when
+        //then
+        Optional<User> userOptional = underTest.findByNickName(user.getNickName());
+        assertThat(userOptional)
+                .isPresent()
+                .hasValueSatisfying(c -> {
+                    assertThat(c).isEqualToComparingFieldByField(user);
+                });
+    }
+
+    @Test
+    void itShouldNotReturnUserByNicknameBecauseThisUserDoNotExist() {
+        //given
+        User user = new User.Builder()
+                .nickName("nick")
+                .login("login")
+                .password("password")
+                .email("email@gmail.com")
+                .roles("ROLE_USER")
+                .isEnabled(false)
+                .build();
+
+        given(userRepository.findByNickName(user.getNickName())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.findByNickName(user.getNickName()))
+                .isExactlyInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("We cant find user with that nickname");
+    }
+
+    @Test
+    void itShouldReturnListOfAllUsers() {
+        //given
+        User user1 = new User.Builder()
+                .nickName("nick")
+                .login("login")
+                .password("password")
+                .email("email@gmail.com")
+                .roles("ROLE_USER")
+                .isEnabled(false)
+                .build();
+
+        User user2 = new User.Builder()
+                .nickName("nick2")
+                .login("login2")
+                .password("password2")
+                .email("email2@gmail.com")
+                .roles("ROLE_USER")
+                .isEnabled(false)
+                .build();
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user1);
+        userList.add(user2);
+
+        //when
+        when(userRepository.findAll()).thenReturn(userList);
+
+        //then
+        List<User> userList1 = underTest.findAll();
+        assertThat(userList).isSameAs(userList1);
     }
 }

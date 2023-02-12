@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class BookService {
     private BookRepository bookRepository;
     private UserService userService;
     private RestTemplate restTemplate = new RestTemplate();
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public BookService(BookRepository bookRepository, UserService userService) {
@@ -51,6 +54,7 @@ public class BookService {
                     .build();
             userOptional.get().getBooks().add(bookBuilder);
             bookBuilder.setUser(userOptional.get());
+            logger.trace("User    " + userOptional.get().getNickName() + "add book" + bookBuilder.getTitle());
             return bookRepository.save(bookBuilder);
         } else {
             return null;
@@ -83,6 +87,7 @@ public class BookService {
         Optional<User> userOptional = userService.findByNickName(currentUser);
         Optional<Book> bookOptional = findById(id);
         if(userOptional.isPresent() && bookOptional.isPresent()){
+            logger.trace("User    " + userOptional.get().getNickName() + "delete book" + bookOptional.get().getTitle());
             userOptional.get().getBooks().remove(bookOptional.get());
         }
     }
@@ -92,5 +97,6 @@ public class BookService {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> userOptional = userService.findByNickName(currentUser);
         userOptional.ifPresent(user -> user.getBooks().clear());
+        logger.trace("User    " + userOptional.get().getNickName() + "delete all his books");
     }
 }
